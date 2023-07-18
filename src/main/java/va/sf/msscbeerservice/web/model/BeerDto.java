@@ -1,12 +1,11 @@
 package va.sf.msscbeerservice.web.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
-import javax.validation.constraints.Positive;
+
+
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.UUID;
@@ -30,6 +29,7 @@ public class BeerDto {
     private OffsetDateTime lastModifiedDate;
 
     @NotBlank
+    @Size(min = 3, max = 100)
     private String beerName;
 
     @NotNull
@@ -70,7 +70,7 @@ public class BeerDto {
         private @Null Integer version;
         private @Null OffsetDateTime createdDate;
         private @Null OffsetDateTime lastModifiedDate;
-        private @NotBlank String beerName;
+        private @NotBlank @Size(min = 3, max = 100) String beerName;
         private @NotNull BeerStyleEnum beerStyle;
         private @NotNull String upc;
         private @Positive @NotNull BigDecimal price;
@@ -98,7 +98,7 @@ public class BeerDto {
             return this;
         }
 
-        public BeerDtoBuilder beerName(@NotBlank String beerName) {
+        public BeerDtoBuilder beerName(@NotBlank @Size(min = 3, max = 100) String beerName) {
             this.beerName = beerName;
             return this;
         }
