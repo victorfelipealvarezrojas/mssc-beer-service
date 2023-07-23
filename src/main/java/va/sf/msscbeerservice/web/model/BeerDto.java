@@ -1,19 +1,23 @@
 package va.sf.msscbeerservice.web.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 
 
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
 public class BeerDto {
     static final long serialVersionUID = -5815566940065181210L;
-
+    @JsonProperty("beerId")
     @Null
     private UUID id;
 
@@ -45,10 +49,14 @@ public class BeerDto {
 
     private Integer quantityOnHand;
 
+    @JsonSerialize(using = LocalDataSerializer.class)
+    @JsonDeserialize(using = LocalDataDeserializer.class)
+    private LocalDate myLocalDate;
+
     public BeerDto(
             @Null UUID id, @Null Integer version, @Null OffsetDateTime createdDate,
             @Null OffsetDateTime lastModifiedDate, @NotBlank String beerName, @NotNull BeerStyleEnum beerStyle,
-            @NotNull String upc, @Positive @NotNull BigDecimal price, Integer quantityOnHand)
+            @NotNull String upc, @Positive @NotNull BigDecimal price, Integer quantityOnHand, LocalDate myLocalDate)
     {
         this.id = id;
         this.version = version;
@@ -59,6 +67,7 @@ public class BeerDto {
         this.upc = upc;
         this.price = price;
         this.quantityOnHand = quantityOnHand;
+        this.myLocalDate = myLocalDate;
     }
 
     public static BeerDtoBuilder builder() {
@@ -75,6 +84,7 @@ public class BeerDto {
         private @NotNull String upc;
         private @Positive @NotNull BigDecimal price;
         private Integer quantityOnHand;
+        private LocalDate myLocalDate;
 
         public BeerDtoBuilder id(@Null UUID id) {
             this.id = id;
@@ -124,27 +134,35 @@ public class BeerDto {
             return this;
         }
 
+        @JsonFormat(shape = JsonFormat.Shape.STRING)
+        @JsonSerialize(using = LocalDataSerializer.class)
+        @JsonDeserialize(using = LocalDataDeserializer.class)
+        public BeerDtoBuilder myLocalDate(LocalDate myLocalDate) {
+            this.myLocalDate = myLocalDate;
+            return this;
+        }
+
         public BeerDto build() {
             return new BeerDto(
                     this.id, this.version, this.createdDate,
                     this.lastModifiedDate, this.beerName,
                     this.beerStyle, this.upc, this.price,
-                    this.quantityOnHand
+                    this.quantityOnHand,
+                    this.myLocalDate
             );
         }
 
         public String toString() {
-            return "BeerDto.BeerDtoBuilder(id="
-                    + this.id + ", version="
-                    + this.version + ", createdDate="
-                    + this.createdDate + ", lastModifiedDate="
-                    + this.lastModifiedDate + ", beerName="
-                    + this.beerName + ", beerStyle="
-                    + this.beerStyle + ", upc="
-                    + this.upc + ", price="
-                    + this.price + ", quantityOnHand="
-                    + this.quantityOnHand
-                    + ")";
+            return  this.id
+                    + ", version=" + this.version
+                    + ", createdDate=" + this.createdDate
+                    + ", lastModifiedDate=" + this.lastModifiedDate
+                    + ", beerName=" + this.beerName
+                    + ", beerStyle=" + this.beerStyle
+                    + ", upc=" + this.upc
+                    + ", price=" + this.price
+                    + ", quantityOnHand=" + this.quantityOnHand
+                    + ", myLocalDate=" + this.myLocalDate;
         }
     }
 }
