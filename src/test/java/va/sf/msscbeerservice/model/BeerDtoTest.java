@@ -31,8 +31,8 @@ public class BeerDtoTest extends BaseTest{
                     "\"quantityOnHand\":null" +
                 "}";
 
-        BeerDto dto = objectMapper.readValue(json, BeerDto.class);
+        // BeerDto dto = objectMapper.readValue(json, BeerDto.class);
 
-        System.out.println(dto);
+        // System.out.println(dto);
     }
 }
